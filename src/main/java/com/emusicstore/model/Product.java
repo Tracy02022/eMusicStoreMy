@@ -21,7 +21,7 @@ public class Product {
     private String productCondition;
     private String productStatus;
     private int unitInStock;
-    private String productionManufacture;
+    private String productManufacturer;
 
     public String getProductName() {
         return productName;
@@ -79,12 +79,12 @@ public class Product {
         this.unitInStock = unitInStock;
     }
 
-    public String getProductionManufacture() {
-        return productionManufacture;
+    public String getProductManufacturer() {
+        return productManufacturer;
     }
 
-    public void setProductionManufacture(String productionManufacture) {
-        this.productionManufacture = productionManufacture;
+    public void setProductManufacturer(String productManufacturer) {
+        this.productManufacturer = productManufacturer;
     }
 
 
