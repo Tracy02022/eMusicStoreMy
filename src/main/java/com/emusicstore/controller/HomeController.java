@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -20,6 +21,8 @@ import java.util.List;
 
 @Controller
 public class HomeController {
+
+    private Path path;
 
     @Autowired
     private ProductDao productDao;
@@ -73,9 +76,18 @@ public class HomeController {
     @RequestMapping(value = "/admin/productInventory/addProduct", method = RequestMethod.POST)
     public String addProductPost(@ModelAttribute("product") Product product) {
         productDao.addProduct(product);
+        
 
 
         return "redirect:/admin/productInventory";
     }
+
+    @RequestMapping("/admin/productInventory/deleteProduct/{id}")
+    public String deleteProduct(@PathVariable String id, Model model) {
+
+        productDao.deleteProduct(id);
+        return "redirect:/admin/productInventory";
+    }
+
 
 }
