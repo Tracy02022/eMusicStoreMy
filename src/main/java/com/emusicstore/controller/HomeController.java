@@ -37,7 +37,7 @@ public class HomeController {
     }
 
     @RequestMapping("/productList")
-    public String getProducts(Model model){
+    public String getProducts(Model model) {
         List<Product> products = productDao.getAllProducts();
         model.addAttribute("products", products);
 
@@ -58,7 +58,7 @@ public class HomeController {
     }
 
     @RequestMapping("/admin/productInventory")
-    public  String productInventory(Model model) {
+    public String productInventory(Model model) {
         List<Product> products = productDao.getAllProducts();
         model.addAttribute("products", products);
 
@@ -91,7 +91,7 @@ public class HomeController {
                 productImage.transferTo(new File(path.toString()));
             } catch (Exception e) {
                 e.printStackTrace();
-                throw  new RuntimeException("Product image saving failed");
+                throw new RuntimeException("Product image saving failed");
             }
         }
         return "redirect:/admin/productInventory";
@@ -112,9 +112,34 @@ public class HomeController {
         productDao.deleteProduct(id);
 
 
-
         return "redirect:/admin/productInventory";
     }
 
+    @RequestMapping("/admin/productInventory/editProduct/{id}")
+    public String editProduct(@PathVariable("id") String id, Model model) {
+        Product product = productDao.getProductById(id);
+        model.addAttribute(product);
 
+
+        return "editProduct";
+    }
+
+    @RequestMapping(value = "/admin/productInventory/editProduct", method = RequestMethod.POST)
+    public String editProduct(@ModelAttribute("product") Product product, Model model, HttpServletRequest request)
+    {
+        MultipartFile productImage = product.getProductImage();
+        String rootDicrectory = request.getSession().getServletContext().getRealPath("/");
+        path = Paths.get(rootDicrectory + "/WEB-INF/resources/images/" + product.getProductId() + ".png" );
+
+        if (productImage!= null && !productImage.isEmpty()){
+            try {
+                productImage.transferTo(new File(path.toString()));
+            }catch (Exception e) {
+                throw new RuntimeException("Product image saving failed",e);
+            }
+        }
+
+        productDao.editProduct(product);
+        return "redirect:/admin/productInventory";
+    }
 }
